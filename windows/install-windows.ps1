@@ -2,15 +2,16 @@
 # Installs the agent and registers it to run at startup as a hidden background task.
 #
 # Usage (in PowerShell, from the folder containing this script + the exe):
-#   powershell -ExecutionPolicy Bypass -File install-windows.ps1 -MqttHost homeassistant.tailc1811e.ts.net -MqttPass mqtt -NodeName laptop
+#   powershell -ExecutionPolicy Bypass -File install-windows.ps1 -MqttHost <broker-host> -MqttPass <password> -NodeName laptop
 #
 # Notes:
 #   - On Windows the MQTT broker hostname must be one the laptop can resolve.
-#     Use the full Tailscale name (e.g. homeassistant.tailc1811e.ts.net), NOT
-#     the bare "homeassistant" (Windows won't resolve that).
+#     Use a resolvable name/IP for your broker (e.g. its Tailscale MagicDNS name
+#     like homeassistant.<your-tailnet>.ts.net, or a plain LAN IP). A bare
+#     single-label name like "homeassistant" often won't resolve on Windows.
 
 param(
-    [string]$MqttHost = "homeassistant.tailc1811e.ts.net",
+    [string]$MqttHost = "homeassistant",
     [string]$MqttPort = "1883",
     [string]$MqttUser = "mqtt",
     [string]$MqttPass = "mqtt",
