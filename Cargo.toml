@@ -1,0 +1,22 @@
+[package]
+name = "resource-reporter"
+version = "0.1.0"
+edition = "2021"
+description = "Tiny agent that samples host resources and publishes them to Home Assistant via MQTT auto-discovery"
+
+[[bin]]
+name = "resource-reporter"
+path = "src/main.rs"
+
+[dependencies]
+rumqttc = "0.24"
+sysinfo = "0.32"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[profile.release]
+opt-level = "z"
+lto = true
+strip = true
+codegen-units = 1
+panic = "abort"

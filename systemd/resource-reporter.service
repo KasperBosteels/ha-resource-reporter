@@ -1,0 +1,19 @@
+[Unit]
+Description=Resource Reporter (publishes host stats to Home Assistant via MQTT)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.config/resource-reporter/env
+ExecStart=%h/.local/bin/resource-reporter
+Restart=always
+RestartSec=10
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

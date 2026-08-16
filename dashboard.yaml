@@ -1,0 +1,167 @@
+# Home Assistant dashboard for resource-reporter
+#
+# Paste the contents below into a dashboard in RAW EDIT mode:
+#   Dashboard -> (top-right 3 dots) -> Edit -> (3 dots again) -> Raw configuration editor
+# Replace everything with this file's contents (minus these comment lines) and Save.
+#
+# Entity IDs follow the pattern sensor.<node>_<sensor name>, e.g.
+#   sensor.home_server_cpu_usage, sensor.aipi_docker_memory
+# If any card says "entity not found", open Settings -> Devices & Services -> MQTT ->
+# the device, and copy the exact entity id shown.
+
+views:
+  - title: Servers
+    path: servers
+    icon: mdi:server
+    type: sections
+    max_columns: 2
+    sections:
+      # ---------------- home-server ----------------
+      - type: grid
+        cards:
+          - type: heading
+            heading: 🖥️ home-server
+          - type: gauge
+            entity: sensor.home_server_cpu_usage
+            name: CPU
+            min: 0
+            max: 100
+            needle: true
+            severity: { green: 0, yellow: 60, red: 85 }
+          - type: gauge
+            entity: sensor.home_server_memory_usage
+            name: RAM
+            min: 0
+            max: 100
+            needle: true
+            severity: { green: 0, yellow: 70, red: 90 }
+          - type: gauge
+            entity: sensor.home_server_disk_usage
+            name: Disk
+            min: 0
+            max: 100
+            needle: true
+            severity: { green: 0, yellow: 75, red: 90 }
+          - type: entities
+            title: Details
+            entities:
+              - entity: sensor.home_server_cpu_temperature
+                name: Temperature
+              - entity: sensor.home_server_swap_usage
+                name: Swap
+              - entity: sensor.home_server_load_average_1m
+                name: Load (1m)
+              - entity: sensor.home_server_network_down
+                name: Network ↓
+              - entity: sensor.home_server_network_up
+                name: Network ↑
+              - entity: sensor.home_server_uptime
+                name: Uptime
+          - type: entities
+            title: 🐳 Docker
+            entities:
+              - entity: sensor.home_server_docker_containers
+                name: Running containers
+              - entity: sensor.home_server_docker_cpu
+                name: Docker CPU
+              - entity: sensor.home_server_docker_memory
+                name: Docker memory
+          - type: history-graph
+            title: home-server — CPU & RAM (24h)
+            hours_to_show: 24
+            entities:
+              - sensor.home_server_cpu_usage
+              - sensor.home_server_memory_usage
+
+      # ---------------- aipi ----------------
+      - type: grid
+        cards:
+          - type: heading
+            heading: 🍓 aipi
+          - type: gauge
+            entity: sensor.aipi_cpu_usage
+            name: CPU
+            min: 0
+            max: 100
+            needle: true
+            severity: { green: 0, yellow: 60, red: 85 }
+          - type: gauge
+            entity: sensor.aipi_memory_usage
+            name: RAM
+            min: 0
+            max: 100
+            needle: true
+            severity: { green: 0, yellow: 70, red: 90 }
+          - type: gauge
+            entity: sensor.aipi_disk_usage
+            name: Disk
+            min: 0
+            max: 100
+            needle: true
+            severity: { green: 0, yellow: 75, red: 90 }
+          - type: entities
+            title: Details
+            entities:
+              - entity: sensor.aipi_cpu_temperature
+                name: Temperature
+              - entity: sensor.aipi_swap_usage
+                name: Swap
+              - entity: sensor.aipi_load_average_1m
+                name: Load (1m)
+              - entity: sensor.aipi_network_down
+                name: Network ↓
+              - entity: sensor.aipi_network_up
+                name: Network ↑
+              - entity: sensor.aipi_uptime
+                name: Uptime
+          - type: entities
+            title: 🐳 Docker
+            entities:
+              - entity: sensor.aipi_docker_containers
+                name: Running containers
+              - entity: sensor.aipi_docker_cpu
+                name: Docker CPU
+              - entity: sensor.aipi_docker_memory
+                name: Docker memory
+          - type: history-graph
+            title: aipi — CPU & RAM (24h)
+            hours_to_show: 24
+            entities:
+              - sensor.aipi_cpu_usage
+              - sensor.aipi_memory_usage
+
+      # ---------------- Home Assistant host (System Monitor) ----------------
+      # Add the built-in "System Monitor" integration, then uncomment and adjust
+      # these to the entity ids it creates (they start with sensor.system_monitor_*).
+      #
+      # - type: grid
+      #   cards:
+      #     - type: heading
+      #       heading: 🏠 Home Assistant
+      #     - type: gauge
+      #       entity: sensor.system_monitor_processor_use
+      #       name: CPU
+      #     - type: gauge
+      #       entity: sensor.system_monitor_memory_use
+      #       name: RAM
+      #     - type: gauge
+      #       entity: sensor.system_monitor_disk_use
+      #       name: Disk
+
+# ---------------------------------------------------------------------------
+# OPTIONAL: auto-listing every Docker container (requires the HACS "auto-entities"
+# custom card). Add as a separate card; it lists all container sensors dynamically:
+#
+# type: custom:auto-entities
+# card:
+#   type: entities
+#   title: 🐳 All containers
+# filter:
+#   include:
+#     - entity_id: sensor.home_server_c_*_mem
+#     - entity_id: sensor.aipi_c_*_mem
+#   exclude: []
+# sort:
+#   method: state
+#   numeric: true
+#   reverse: true
